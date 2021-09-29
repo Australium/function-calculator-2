@@ -38,7 +38,7 @@ function calculator() {
     function askForNumbers (amountOfNumbers) {
         let askedNumbers = [];
 
-        for (let x = 0; x <= (amountOfNumbers - 1); x++) {
+        for (let x = 0; x < amountOfNumbers; x++) {
 
             while (askedNumbers[x] === null || Number.isNaN(+askedNumbers[x])) {
                 askedNumbers[x] = prompt(`Введите ${amountOfNumbers} числа для операции`);
@@ -62,50 +62,36 @@ function calculator() {
     function calcAndShowResult (getOperator,getNumberArray) {
         let givenOperator = getOperator;
         let givenNumbers = getNumberArray;
-        let calcResult = givenNumbers[0];
-        let alertResult = `${givenNumbers[0]}`;
+        let calcResult = 0;
+        if(givenOperator === '-' || givenOperator === '*' || givenOperator === '/' ) calcResult = givenNumbers[0];
+        let alertResult = '';
         
-
         function calcCaseResult (getCaseOperator) {
             let caseOperator = getCaseOperator;
 
-            if (caseOperator === '+') {
-                for (let i = 1; i < (givenNumbers.length); i++ ) {
-                    calcResult += givenNumbers[i];
-                    alertResult += ` ${givenOperator} ` + givenNumbers[i];
+            givenNumbers.forEach((item,i,array) => {
+                switch (caseOperator) {
+                    case '+' : 
+                        calcResult += item;
+                        i === array.length - 1 ? alertResult += item : alertResult += item + ` ${caseOperator} `;
+                        break;
+                    case '-' :
+                        if (i !== 0) calcResult -= item;
+                        i === array.length - 1 ? alertResult += item : alertResult += item + ` ${caseOperator} `;
+                        break;
+                    case '*' : 
+                        if (i !== 0) calcResult *= item;
+                        i === array.length - 1 ? alertResult += item : alertResult += item + ` ${caseOperator} `;
+                         break;
+                    case '/' : 
+                        if (i !== 0) calcResult /= item;
+                        i === array.length - 1 ? alertResult += item : alertResult += item + ` ${caseOperator} `;
+                        break;
                 }
-            } else if (caseOperator === '-') {
-                for (let i = 1; i < (givenNumbers.length); i++ ) {
-                    calcResult -= givenNumbers[i];
-                    alertResult += ` ${givenOperator} ` + givenNumbers[i];
-                }
-            } else if (caseOperator === '/') {
-                for (let i = 1; i < (givenNumbers.length); i++ ) {
-                    calcResult /= givenNumbers[i];
-                    alertResult += ` ${givenOperator} ` + givenNumbers[i];
-                };
-            } else if (caseOperator === '*') {
-                for (let i = 1; i < (givenNumbers.length); i++ ) {
-                    calcResult *= givenNumbers[i];
-                    alertResult += ` ${givenOperator} ` + givenNumbers[i];
-                };
-            }
+            });
         }
-
-        switch (givenOperator) {
-            case '+':   
-                calcCaseResult('+');
-                break;
-            case '-':
-                calcCaseResult('-');
-                break;
-            case '/':
-                calcCaseResult('/');
-                break;
-            case '*': 
-                calcCaseResult('*');
-                break;
-        }
+    
+        calcCaseResult(givenOperator);
 
         let wholeResult = `${alertResult} = ${calcResult}`;
 
@@ -113,6 +99,7 @@ function calculator() {
             return 'Ошибка! 0 на 0 делить нельзя!'
         } 
 
+        console.log(wholeResult);
         return wholeResult;
     }
 }
